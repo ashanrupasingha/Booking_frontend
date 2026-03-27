@@ -4,6 +4,28 @@ import { useRouter } from 'next/navigation';
 import { apiFetch } from '../utils/api';
 import Link from 'next/link';
 
+const inputStyle = {
+  width: '100%',
+  padding: '0.9rem 1rem',
+  borderRadius: '12px',
+  background: 'rgba(15, 23, 42, 0.6)',
+  border: '1px solid rgba(99,102,241,0.3)',
+  color: '#e2e8f0',
+  fontSize: '0.95rem',
+  outline: 'none',
+  boxSizing: 'border-box',
+  transition: '0.3s',
+  boxShadow: 'inset 0 0 10px rgba(99,102,241,0.2)'
+};
+
+const labelStyle = {
+  color: '#94a3b8',
+  fontSize: '0.8rem',
+  fontWeight: 500,
+  display: 'block',
+  marginBottom: '0.4rem'
+};
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,106 +59,117 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '1rem',
-      fontFamily: "'Inter', sans-serif"
-    }}>
       <div style={{
-        width: '100%',
-        maxWidth: '420px',
-        background: 'rgba(255,255,255,0.05)',
-        backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255,255,255,0.1)',
-        borderRadius: '20px',
-        padding: '2.5rem',
-        boxShadow: '0 25px 50px rgba(0,0,0,0.5)'
+        minHeight: '100vh',
+        background: 'radial-gradient(circle at top, #1e1b4b, #020617)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+        fontFamily: "'Inter', sans-serif"
       }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🅿️</div>
-          <h1 style={{ color: '#fff', fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>Welcome Back</h1>
-          <p style={{ color: 'rgba(255,255,255,0.5)', marginTop: '0.5rem', fontSize: '0.9rem' }}>
-            Sign in to Smart Parking System
-          </p>
-        </div>
 
-        {error && (
-          <div style={{
-            background: 'rgba(239,68,68,0.15)',
-            border: '1px solid rgba(239,68,68,0.4)',
-            borderRadius: '10px',
-            padding: '0.75rem 1rem',
-            color: '#f87171',
-            fontSize: '0.875rem',
-            marginBottom: '1.5rem',
-            textAlign: 'center'
+        <div style={{
+          width: '100%',
+          maxWidth: '420px',
+          background: 'rgba(15, 23, 42, 0.7)',
+          backdropFilter: 'blur(25px)',
+          border: '1px solid rgba(99,102,241,0.2)',
+          borderRadius: '24px',
+          padding: '2.5rem',
+          boxShadow: '0 0 40px rgba(99,102,241,0.3)'
+        }}>
+
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <div style={{ fontSize: '2.7rem' }}>🅿️</div>
+            <h1 style={{ color: '#e0e7ff', fontSize: '1.9rem', fontWeight: 700 }}>
+              Welcome Back
+            </h1>
+            <p style={{ color: '#64748b', fontSize: '0.85rem' }}>
+              Smart Parking System
+            </p>
+          </div>
+
+          {/* Error */}
+          {error && (
+              <div style={{
+                background: 'rgba(239,68,68,0.1)',
+                border: '1px solid rgba(239,68,68,0.4)',
+                borderRadius: '10px',
+                padding: '0.7rem',
+                color: '#f87171',
+                fontSize: '0.85rem',
+                marginBottom: '1.2rem',
+                textAlign: 'center'
+              }}>
+                {error}
+              </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+
+            <div>
+              <label style={labelStyle}>Email Address</label>
+              <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={inputStyle}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Password</label>
+              <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  style={inputStyle}
+              />
+            </div>
+
+            {/* Button */}
+            <button
+                type="submit"
+                disabled={loading}
+                style={{
+                  padding: '0.9rem',
+                  borderRadius: '12px',
+                  background: loading
+                      ? 'rgba(99,102,241,0.4)'
+                      : 'linear-gradient(135deg, #6366f1, #22d3ee)',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  border: 'none',
+                  cursor: loading ? 'not-allowed' : 'pointer',
+                  transition: '0.3s',
+                  boxShadow: '0 0 20px rgba(99,102,241,0.6)'
+                }}
+            >
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+
+          </form>
+
+          {/* Footer */}
+          <p style={{
+            textAlign: 'center',
+            color: '#64748b',
+            fontSize: '0.8rem',
+            marginTop: '1.5rem'
           }}>
-            {error}
-          </div>
-        )}
+            Don&apos;t have an account?{' '}
+            <Link href="/register" style={{ color: '#38bdf8', fontWeight: 600 }}>
+              Register
+            </Link>
+          </p>
 
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-          <div>
-            <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', fontWeight: 500, display: 'block', marginBottom: '0.5rem' }}>
-              Email Address
-            </label>
-            <input
-              type="email"
-              required
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%', padding: '0.85rem 1rem', borderRadius: '10px',
-                background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)',
-                color: '#fff', fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box'
-              }}
-            />
-          </div>
-          <div>
-            <label style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.875rem', fontWeight: 500, display: 'block', marginBottom: '0.5rem' }}>
-              Password
-            </label>
-            <input
-              type="password"
-              required
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%', padding: '0.85rem 1rem', borderRadius: '10px',
-                background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)',
-                color: '#fff', fontSize: '0.95rem', outline: 'none', boxSizing: 'border-box'
-              }}
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%', padding: '0.9rem', borderRadius: '10px',
-              background: loading ? 'rgba(99,102,241,0.5)' : 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-              color: '#fff', fontWeight: 700, fontSize: '1rem',
-              border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
-              transition: 'all 0.3s ease', marginTop: '0.5rem',
-              boxShadow: '0 4px 20px rgba(99,102,241,0.4)'
-            }}
-          >
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
-
-        <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.5)', fontSize: '0.875rem', marginTop: '1.5rem' }}>
-          Don&apos;t have an account?{' '}
-          <Link href="/register" style={{ color: '#818cf8', fontWeight: 600, textDecoration: 'none' }}>
-            Register here
-          </Link>
-        </p>
+        </div>
       </div>
-    </div>
   );
 }
